@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ku">
+<!-- Previous head and style sections remain the same -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ئەکادیمیای خۆراکزانی کوردستان - ژمێرەری خۆراک</title>
+    <style>
+        /* All previous styles remain exactly the same */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #e4e6e9;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .tab.active {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .calculator {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .calculator.active {
+            display: block;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .academy-name {
+            color: #2c3e50;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #3498db;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .info-box {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .calculator {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="academy-name">ئەکادیمیای خۆراکزانی کوردستان</h1>
+        <div style="color: #666;">Kurdistan Nutrition Academy</div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="showCalculator('bmi')">BMI ژمێرەر</button>
+        <button class="tab" onclick="showCalculator('calorie')">ژمێرەری کالۆری</button>
+    </div>
+
+    <!-- BMI Calculator -->
+    <div id="bmiCalculator" class="calculator active">
+        <h2 style="text-align: center;">ژمێرەری BMI</h2>
+        <div class="input-section">
+            <div class="input-group">
+                <label>کێش (کیلۆگرام)</label>
+                <input type="number" id="bmiWeight" placeholder="کێشت بنووسە">
+            </div>
+            <div class="input-group">
+                <label>بەرزی (سانتیمەتر)</label>
+                <input type="number" id="bmiHeight" placeholder="بەرزیت بنووسە">
+            </div>
+            <button onclick="calculateBMI()">ژماردن</button>
+        </div>
+        <div id="bmiResult" class="result"></div>
+        <div class="info-box">
+            <h3>پێوەرەکانی BMI:</h3>
+            <div style="background-color: #d4ecfd; padding: 8px; margin: 5px 0; border-radius: 4px;">کەم کێش: کەمتر لە ١٨.٥</div>
+            <div style="background-color: #d4f8d4; padding: 8px; margin: 5px 0; border-radius: 4px;">کێشی نۆرماڵ: ١٨.٥ - ٢٤.٩</div>
+            <div style="background-color: #fff3cd; padding: 8px; margin: 5px 0; border-radius: 4px;">زیادە کێش: ٢٥ - ٢٩.٩</div>
+            <div style="background-color: #ffd4d4; padding: 8px; margin: 5px 0; border-radius: 4px;">قەڵەوی: زیاتر لە ٣٠</div>
+        </div>
+    </div>
+
+    <!-- Calorie Calculator -->
+    <div id="calorieCalculator" class="calculator">
+        <h2 style="text-align: center;">ژمێرەری کالۆری ڕۆژانە</h2>
+        <div class="input-section">
+            <div class="input-group">
+                <label>تەمەن</label>
+                <input type="number" id="age" placeholder="تەمەنت بنووسە">
+            </div>
+            <div class="input-group">
+                <label>ڕەگەز</label>
+                <select id="gender">
+                    <option value="male">نێر</option>
+                    <option value="female">مێ</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>کێش (کیلۆگرام)</label>
+                <input type="number" id="calWeight" placeholder="کێشت بنووسە">
+            </div>
+            <div class="input-group">
+                <label>بەرزی (سانتیمەتر)</label>
+                <input type="number" id="calHeight" placeholder="بەرزیت بنووسە">
+            </div>
+            <div class="input-group">
+                <label>ئاستی چالاکی</label>
+                <select id="activity">
+                    <option value="1.2">کەم چالاک (کاری مەکتەبی)</option>
+                    <option value="1.375">چالاکی سووک (وەرزش ١-٣ جار لە هەفتەدا)</option>
+                    <option value="1.55">چالاکی مامناوەند (وەرزش ٣-٥ جار لە هەفتەدا)</option>
+                    <option value="1.725">زۆر چالاک (وەرزش ٦-٧ جار لە هەفتەدا)</option>
+                    <option value="1.9">زۆر زۆر چالاک (وەرزشکاری پیشەیی)</option>
+                </select>
+            </div>
+            <button onclick="calculateCalories()">ژماردنی کالۆری</button>
+        </div>
+        <div id="calorieResult" class="result"></div>
+        <div class="info-box">
+            <h3>زانیاری گرنگ:</h3>
+            <p>ئەم ژمارانە تەنها خەملاندنن و دەکرێت جیاواز بن بۆ هەر کەسێک.</p>
+            <p>بۆ دابەزاندنی کێش: ٥٠٠ کالۆری کەم بکەوە لە ئەنجامی کۆتایی</p>
+            <p>بۆ زیادکردنی کێش: ٥٠٠ کالۆری زیاد بکە لە ئەنجامی کۆتایی</p>
+        </div>
+    </div>
+
+    <script>
+        // Fixed tab switching function
+        function showCalculator(type) {
+            // Hide all calculators
+            document.querySelectorAll('.calculator').forEach(calc => calc.classList.remove('active'));
+            // Remove active class from all tabs
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected calculator
+            document.getElementById(type + 'Calculator').classList.add('active');
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // BMI Calculator function
+        function calculateBMI() {
+            const weight = Number(document.getElementById('bmiWeight').value);
+            const height = Number(document.getElementById('bmiHeight').value) / 100;
+            
+            if (!weight || !height) {
+                document.getElementById('bmiResult').innerHTML = '<p style="color: #e74c3c;">تکایە کێش و بەرزی خۆت بنووسە</p>';
+                return;
+            }
+            
+            const bmi = (weight / (height * height)).toFixed(1);
+            let category = '';
+            let color = '';
+            
+            if (bmi < 18.5) {
+                category = 'کەم کێش';
+                color = '#3498db';
+            } else if (bmi >= 18.5 && bmi < 25) {
+                category = 'کێشی نۆرماڵ';
+                color = '#2ecc71';
+            } else if (bmi >= 25 && bmi < 30) {
+                category = 'زیادە کێش';
+                color = '#f1c40f';
+            } else {
+                category = 'قەڵەوی';
+                color = '#e74c3c';
+            }
+            
+            document.getElementById('bmiResult').innerHTML = `
+                <h2 style="margin: 10px 0;">BMI ـی تۆ: <strong>${bmi}</strong></h2>
+                <p style="color: ${color}; font-size: 20px; font-weight: bold;">${category}</p>
+            `;
+        }
+
+        // Fixed Calorie Calculator function
+        function calculateCalories() {
+            // Get all input values
+            const age = parseFloat(document.getElementById('age').value);
+            const gender = document.getElementById('gender').value;
+            const weight = parseFloat(document.getElementById('calWeight').value);
+            const height = parseFloat(document.getElementById('calHeight').value);
+            const activity = parseFloat(document.getElementById('activity').value);
+
+            // Validate inputs
+            if (!age || !weight || !height || isNaN(age) || isNaN(weight) || isNaN(height)) {
+                document.getElementById('calorieResult').innerHTML = 
+                    '<p style="color: #e74c3c;">تکایە هەموو خانەکان پڕ بکەوە</p>';
+                return;
+            }
+
+            // Calculate BMR using Mifflin-St Jeor Equation
+            let bmr;
+            if (gender === 'male') {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+            } else {
+                bmr = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+            }
+
+            // Calculate total daily calories
+            const dailyCalories = Math.round(bmr * activity);
+            const weightLoss = Math.round(dailyCalories - 500);
+            const weightGain = Math.round(dailyCalories + 500);
+
+            // Display results
+            document.getElementById('calorieResult').innerHTML = `
+                <h3 style="color: #2c3e50;">کالۆری پێویست بۆ ڕۆژانە:</h3>
+                <h2 style="color: #3498db; margin: 10px 0;">${dailyCalories} کالۆری</h2>
+                <p style="color: #666;">بۆ پاراستنی کێشی ئێستا</p>
+                <div style="margin-top: 15px;">
+                    <p style="color: #e74c3c;">بۆ دابەزاندنی کێش: ${weightLoss} کالۆری</p>
+                    <p style="color: #2ecc71;">بۆ زیادکردنی کێش: ${weightGain} کالۆری</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
